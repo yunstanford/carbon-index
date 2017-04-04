@@ -1,3 +1,4 @@
+from .node import TrieNode
 
 
 class CarbonIndex:
@@ -8,10 +9,11 @@ class CarbonIndex:
     def insert(self, metric):
 
 
-    def search(self, metric):
-
-
-    def prefix_search(self, prefix):
+    def has_metric(self, metric):
 
 
     def delete(self, metric):
+
+
+    def expand_query(self, metric):
+        
