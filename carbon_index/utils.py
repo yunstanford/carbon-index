@@ -21,10 +21,10 @@ def match_entries(entries, pattern):
 
 
 def expand_braces(orig):
-	"""
+    """
     Brace expanding patch for python3 borrowed from:
     https://bugs.python.org/issue9584
-	"""
+    """
     r = r'.*(\{.+?[^\\]\})'
     p = re.compile(r)
 

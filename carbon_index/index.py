@@ -2,16 +2,16 @@
 
 class CarbonIndex:
 
-	def __init__(self):
+    def __init__(self):
 
 
-	def insert(self, metric):
+    def insert(self, metric):
 
 
-	def search(self, metric):
+    def search(self, metric):
 
 
-	def prefix_search(self, prefix):
+    def prefix_search(self, prefix):
 
 
-	def delete(self, metric):
+    def delete(self, metric):
