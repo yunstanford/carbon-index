@@ -36,9 +36,11 @@ class TrieNode:
 		args: query_pattern.
 		"""
 		matches = []
+		patterns = expand_braces(pattern)
 		for child in self.children:
-			if fnmatch.fnmatch(child.name, pattern):
-				matches.append(child)
+			for p in patterns:
+				if fnmatch.fnmatch(child.name, p):
+					matches.append(child)
 		return matches
 
 	def delete(self, child_name):
@@ -104,12 +106,3 @@ class TrieNode:
 			return self.has_child(query) and self.get(query).is_exist("")
 		part = query[:sep_index]
 		return self.has_child(part) and self.get(part).is_exist(query[sep_index + 1:])
-
-		
-
-
-
-
-
-
-
