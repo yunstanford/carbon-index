@@ -1,4 +1,3 @@
-import pytest
 from carbon_index.node import TrieNode
 
 
@@ -50,6 +49,12 @@ def test_node_add(trie_node):
     assert trie_node.has_child('LA')
 
 
+def test_node_add_is_leaf(trie_node):
+    assert trie_node.get('SF').is_leaf is False
+    trie_node.add(TrieNode('SF'))
+    assert trie_node.get('SF').is_leaf is True
+
+
 def test_expand_query_no_wildcard(trie_node):
     queries = trie_node.expand_query('Seattle.zillow')
     assert queries == ['Seattle.zillow']
@@ -65,10 +70,17 @@ def test_expand_query_wildcards(trie_node):
     assert len(queries) == 3
     queries = trie_node.expand_query('*.*')
     assert len(queries) == 6
-    assert 'ZG.NewYork.hotpads' in queries
+    assert 'NewYork.hotpads' in queries
 
 
 def test_is_exist(trie_node):
     assert trie_node.is_exist('Seattle.zillow') is True
     assert trie_node.is_exist('NewYork.hotpads') is True
     assert trie_node.is_exist('Seattle.trulia') is False
+
+
+def test_is_exist_add_leaf_in_branch_node(trie_node):
+    assert trie_node.is_exist('Seattle.zillow') is True
+    assert trie_node.is_exist('Seattle') is False
+    trie_node.add(TrieNode('Seattle'))
+    assert trie_node.is_exist('Seattle') is True

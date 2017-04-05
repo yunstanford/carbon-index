@@ -56,8 +56,15 @@ class TrieNode:
         append a child node.
 
         args: child node.
+
+        special case:
+        Both ZG.seattle and ZG.seattle.zillow exist, we should take care of it as well.
         """
-        self.children[child_node.name] = child_node
+        if child_node.name in self.children:
+            if (not self.children[child_node.name].is_leaf) and child_node.is_leaf:
+                self.children[child_node.name].is_leaf = child_node.is_leaf
+        else:
+            self.children[child_node.name] = child_node
 
     def expand_query(self, query):
         """
@@ -71,7 +78,7 @@ class TrieNode:
         sep_index = query.find(self.sep)
 
         if sep_index < 0:
-            return [q.name for q in self.get_all(query)]
+            return [q.name for q in self.get_all(query) if q.is_leaf]
         else:
             queries = []
             cur_part = query[:sep_index]
@@ -82,8 +89,6 @@ class TrieNode:
                 for sq in sub_queries:
                     queries.append(".".join([match.name, sq]))
             return queries
-
-
 
     def is_leaf(self):
         """

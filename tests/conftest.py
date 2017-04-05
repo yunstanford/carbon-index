@@ -1,6 +1,7 @@
 import pytest
 from carbon_index.node import TrieNode
 
+
 @pytest.fixture
 def trie_node():
     # level 1
@@ -23,9 +24,7 @@ def trie_node():
     new_york.add(hotpads)
     new_york.add(streeteasy)
     san_francisco.add(trulia)
-
     ZG.add(seattle)
     ZG.add(new_york)
     ZG.add(san_francisco)
-
     return ZG
