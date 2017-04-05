@@ -40,3 +40,4 @@ def carbon_index():
     index.insert('ZG.zillow.product.listing')
     index.insert('ZG.trulia.product')
     index.insert('ZG.trulia.product.rental')
+    return index

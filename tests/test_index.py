@@ -14,6 +14,8 @@ def test_index_insert(carbon_index):
 	carbon_index.insert('ZG.zillow.velocity.perf')
 	assert carbon_index.has_metric('ZG.hotpads') is True
 	assert carbon_index.has_metric('ZG.zillow.velocity.perf') is True
+	carbon_index.insert('ZG.product')
+	assert carbon_index.has_metric('ZG.product') is True
 
 
 def test_index_expand_query_no_wildcard(carbon_index):
@@ -37,5 +39,5 @@ def test_index_expand_query_brackets(carbon_index):
 
 
 def test_index_expand_query_braces(carbon_index):
-	all_matches = carbon_index.expand_query('ZG.{}.product.*')
+	all_matches = carbon_index.expand_query('ZG.{trulia,zillow}.product.*')
 	assert sorted(all_matches) == ['ZG.trulia.product.rental', 'ZG.zillow.product.listing', 'ZG.zillow.product.rental']
