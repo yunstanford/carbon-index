@@ -1,5 +1,6 @@
 import pytest
 from carbon_index.node import TrieNode
+from carbon_index.index import CarbonIndex
 
 
 @pytest.fixture
@@ -28,3 +29,14 @@ def trie_node():
     ZG.add(new_york)
     ZG.add(san_francisco)
     return ZG
+
+
+@pytest.fixture
+def carbon_index():
+    index = CarbonIndex()
+    index.insert('ZG.zillow.velocity')
+    index.insert('ZG.zillow.velocity.mondev')
+    index.insert('ZG.zillow.product.rental')
+    index.insert('ZG.zillow.product.listing')
+    index.insert('ZG.trulia.product')
+    index.insert('ZG.trulia.product.rental')
