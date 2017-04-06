@@ -18,9 +18,9 @@ def test(build):
         "--cov", "carbon_index",
         "--cov-report", "term-missing",
     ] + build.options.args)
-    build.executables.run([
-        "flake8", "carbon_index", "tests"
-    ])
+    # build.executables.run([
+    #     "flake8", "carbon_index", "tests"
+    # ])
 
 
 def distribute(build):

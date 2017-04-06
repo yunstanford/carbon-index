@@ -74,5 +74,3 @@ class CarbonIndex:
             return deleted
         else:
             return False
-
-

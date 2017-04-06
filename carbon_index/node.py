@@ -1,6 +1,6 @@
-import re
 import fnmatch
 from .utils import expand_braces
+
 
 class TrieNode:
     """
