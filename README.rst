@@ -10,5 +10,5 @@ carbon-index
     :target: https://coveralls.io/github/yunstanford/carbon-index?branch=master
 
 
-An trie index for carbon.
+An trie index for carbon cache.
 
