@@ -45,11 +45,14 @@ class TrieNode:
 
     def delete(self, child_name):
         """
-        provide to delete a child node and its all descendants.
+        provide to pop a child node.
 
         args: name of child node.
         """
-        pass
+        if self.has_child(child_name):
+            self.children.pop(child_name)
+            return True
+        return False
 
     def add(self, child_node):
         """
@@ -95,6 +98,12 @@ class TrieNode:
         return true if the node is leaf.
         """
         return self.is_leaf
+
+    def count(self):
+        """
+        children count.
+        """
+        return len(self.children)
 
     def is_exist(self, query):
         """

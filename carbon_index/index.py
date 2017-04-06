@@ -6,9 +6,10 @@ class CarbonIndex:
     an index for carbon-cache instances.
     """
 
-    def __init__(self, name='carbon_index'):
+    def __init__(self, name='carbon_index', sep='.'):
         self.name = name
         self.root = TrieNode('root', is_leaf=False)
+        self.sep = sep
 
     def insert(self, metric):
         """
@@ -16,7 +17,7 @@ class CarbonIndex:
 
         args: metric name.
         """
-        metric_parts = metric.split('.')
+        metric_parts = metric.split(self.sep)
         self._insert(self.root, metric_parts)
 
     def has_metric(self, metric):
@@ -25,7 +26,7 @@ class CarbonIndex:
 
         args: metric.
         """
-        metric_parts = metric.split('.')
+        metric_parts = metric.split(self.sep)
         cur = self.root
         for part in metric_parts:
             if not cur.has_child(part):
@@ -35,11 +36,14 @@ class CarbonIndex:
 
     def delete(self, metric):
         """
-        remove a metric from index.
+        remove a metric from index. wild.
 
         args: metric, should not include wildcards.
+
+        return: True/False.
         """
-        pass
+        metric_parts = metric.split(self.sep)
+        return self._delete(self.root, metric_parts)
 
     def expand_query(self, query):
         """
@@ -58,3 +62,17 @@ class CarbonIndex:
             return
         parent.add(TrieNode(metric_parts[0], is_leaf=False))
         self._insert(parent.get(metric_parts[0]), metric_parts[1:])
+
+    def _delete(self, cur, metric_parts):
+        if len(metric_parts) == 0:
+            return cur.is_leaf
+        if cur.has_child(metric_parts[0]):
+            nxt = cur.get(metric_parts[0])
+            deleted = self._delete(nxt, metric_parts[1:])
+            if nxt.count() == 0:
+                cur.delete(nxt.name)
+            return deleted
+        else:
+            return False
+
+
