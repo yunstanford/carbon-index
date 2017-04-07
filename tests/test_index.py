@@ -16,6 +16,9 @@ def test_index_insert(carbon_index):
     assert carbon_index.has_metric('ZG.zillow.velocity.perf') is True
     carbon_index.insert('ZG.product')
     assert carbon_index.has_metric('ZG.product') is True
+    carbon_index.insert('ZG.hotpads.ops')
+    assert carbon_index.has_metric('ZG.hotpads.ops') is True
+    assert carbon_index.has_metric('ZG.hotpads') is True
 
 
 def test_index_expand_query_no_wildcard(carbon_index):

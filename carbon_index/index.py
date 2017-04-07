@@ -60,7 +60,8 @@ class CarbonIndex:
         if len(metric_parts) == 1:
             parent.add(TrieNode(metric_parts[0]))
             return
-        parent.add(TrieNode(metric_parts[0], is_leaf=False))
+        if not parent.get(metric_parts[0]):
+            parent.add(TrieNode(metric_parts[0], is_leaf=False))
         self._insert(parent.get(metric_parts[0]), metric_parts[1:])
 
     def _delete(self, cur, metric_parts):
