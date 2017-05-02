@@ -2,24 +2,6 @@ import fnmatch
 import re
 
 
-def _deduplicate(entries):
-    yielded = set()
-    for entry in entries:
-        if entry not in yielded:
-            yielded.add(entry)
-            yield entry
-
-
-def match_entries(entries, pattern):
-    # First we check for pattern variants (ie. {foo,bar}baz = foobaz or barbaz)
-    matching = []
-
-    for variant in expand_braces(pattern):
-        matching.extend(fnmatch.filter(entries, variant))
-
-    return list(_deduplicate(matching))
-
-
 def expand_braces(orig):
     """
     Brace expanding patch for python3 borrowed from:
