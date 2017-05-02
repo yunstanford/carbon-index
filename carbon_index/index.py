@@ -75,11 +75,15 @@ class CarbonIndex:
 
     def _delete(self, cur, metric_parts):
         if len(metric_parts) == 0:
-            return cur.is_leaf
+            if cur.is_leaf:
+                cur.is_leaf = False
+                return True
+            else:
+                return False
         if cur.has_child(metric_parts[0]):
             nxt = cur.get(metric_parts[0])
             deleted = self._delete(nxt, metric_parts[1:])
-            if nxt.count() == 0:
+            if nxt.count() == 0 and (not nxt.is_leaf):
                 cur.delete(nxt.name)
             return deleted
         else:

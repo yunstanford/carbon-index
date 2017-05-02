@@ -103,16 +103,21 @@ class TrieNode:
         examples: {foo,bar}baz.carbon.cache = [(foobaz.carbon.cache, True), (barbaz.carbon.cache, True)]
         """
         sep_index = query.find(self.sep)
-
+        queries = []
         if sep_index < 0:
-            return [(q.name, q.is_leaf) for q in self.get_all(query)]
+            for q in self.get_all(query):
+                queries.append((q.name, q.is_leaf))
+                # take care of an edge case:
+                # both dir and file exist
+                if q.is_leaf and q.count() != 0:
+                    queries.append((q.name, False))
+            return queries
         else:
-            queries = []
             cur_part = query[:sep_index]
             cur_matches = self.get_all(cur_part)
             sub_query = query[sep_index + 1:]
             for match in cur_matches:
-                sub_queries = match.expand_query(sub_query)
+                sub_queries = match.expand_pattern(sub_query)
                 for sq, is_leaf in sub_queries:
                     queries.append((".".join([match.name, sq]), is_leaf))
             return queries

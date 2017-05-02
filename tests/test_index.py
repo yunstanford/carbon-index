@@ -46,6 +46,19 @@ def test_index_expand_query_braces(carbon_index):
     assert sorted(all_matches) == ['ZG.trulia.product.rental', 'ZG.zillow.product.listing', 'ZG.zillow.product.rental']
 
 
+def test_index_expand_pattern(carbon_index):
+    assert carbon_index.delete('ZG.zillow.velocity.mondev') is True
+    all_matches = carbon_index.expand_pattern('ZG.zillow.*')
+    assert sorted(all_matches) == [('ZG.zillow.product', False), ('ZG.zillow.velocity', True)]
+
+
+def test_index_expand_pattern_edge_case(carbon_index):
+    all_matches = carbon_index.expand_pattern('ZG.zillow.*')
+    assert sorted(all_matches) == [('ZG.zillow.product', False),
+                                   ('ZG.zillow.velocity', False),
+                                   ('ZG.zillow.velocity', True)]
+
+
 def test_index_delete_empty(carbon_index):
     assert carbon_index.delete('') is False
 
@@ -63,3 +76,19 @@ def test_index_delete_remove(carbon_index):
     assert carbon_index.delete('ZG.zillow.product.listing') is True
     assert carbon_index.root.get('ZG').get('zillow').get('product') is None
     assert carbon_index.root.get('ZG').get('zillow').count() == 1
+
+
+def test_index_delete_remove_both_file_and_dir_exist_1(carbon_index):
+    assert carbon_index.has_metric('ZG.zillow.velocity') is True
+    assert carbon_index.has_metric('ZG.zillow.velocity.mondev') is True
+    assert carbon_index.delete('ZG.zillow.velocity.mondev') is True
+    assert carbon_index.has_metric('ZG.zillow.velocity.mondev') is False
+    assert carbon_index.has_metric('ZG.zillow.velocity') is True
+
+
+def test_index_delete_remove_both_file_and_dir_exist_2(carbon_index):
+    assert carbon_index.has_metric('ZG.zillow.velocity') is True
+    assert carbon_index.has_metric('ZG.zillow.velocity.mondev') is True
+    assert carbon_index.delete('ZG.zillow.velocity') is True
+    assert carbon_index.has_metric('ZG.zillow.velocity') is False
+    assert carbon_index.has_metric('ZG.zillow.velocity.mondev') is True
