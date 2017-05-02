@@ -84,3 +84,11 @@ def test_is_exist_add_leaf_in_branch_node(trie_node):
     assert trie_node.is_exist('Seattle') is False
     trie_node.add(TrieNode('Seattle'))
     assert trie_node.is_exist('Seattle') is True
+
+
+def test_expand_pattern_wildcards(trie_node):
+    trie_node.add(TrieNode('realestateDOTcom'))
+    assert trie_node.is_exist('realestateDOTcom') is True
+    patterns = trie_node.expand_pattern('*')
+    assert len(patterns) == 4
+    assert sorted(patterns, key=lambda tup: tup[0]) == [('NewYork', False), ('SF', False), ('Seattle', False), ('realestateDOTcom', True)]

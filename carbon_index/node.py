@@ -93,6 +93,30 @@ class TrieNode:
                     queries.append(".".join([match.name, sq]))
             return queries
 
+    def expand_pattern(self, query):
+        """
+        expand a wildcard query pattern.
+
+        args: query.
+        return: a list of tuples (query,is_leaf).
+
+        examples: {foo,bar}baz.carbon.cache = [(foobaz.carbon.cache, True), (barbaz.carbon.cache, True)]
+        """
+        sep_index = query.find(self.sep)
+
+        if sep_index < 0:
+            return [(q.name, q.is_leaf) for q in self.get_all(query)]
+        else:
+            queries = []
+            cur_part = query[:sep_index]
+            cur_matches = self.get_all(cur_part)
+            sub_query = query[sep_index + 1:]
+            for match in cur_matches:
+                sub_queries = match.expand_query(sub_query)
+                for sq, is_leaf in sub_queries:
+                    queries.append((".".join([match.name, sq]), is_leaf))
+            return queries
+
     def is_leaf(self):
         """
         return true if the node is leaf.

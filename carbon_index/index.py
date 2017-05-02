@@ -51,6 +51,15 @@ class CarbonIndex:
         """
         return self.root.expand_query(query)
 
+    def expand_pattern(self, pattern):
+        """
+        expand a wildcard query pattern.
+
+        This is different from expand_query, as it may
+        return BranchNode.
+        """
+        return self.root.expand_pattern(pattern)
+
     def _insert(self, parent, metric_parts):
         """
         a private helper function for insert metric.
