@@ -11,7 +11,7 @@ install_requires = []
 tests_require = []
 
 setup(name='carbon-index',
-      version='0.1.3',
+      version='0.1.4',
       description='',
       long_description=open(README_PATH).read(),
       author='Yun Xu',
