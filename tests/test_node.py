@@ -43,6 +43,13 @@ def test_node_get_all_wildcard_braces(trie_node):
     assert sorted(all_match_strs) == ['zillow', 'zillow2']
 
 
+def test_node_get_all_wildcard_braces_single_metric(trie_node):
+    seattle = trie_node.get('Seattle')
+    all_matches = seattle.get_all('{zillow}')
+    all_match_strs = [match.name for match in all_matches]
+    assert sorted(all_match_strs) == ['zillow']
+
+
 def test_node_add(trie_node):
     assert trie_node.get('LA') is None
     trie_node.add(TrieNode('LA'))
