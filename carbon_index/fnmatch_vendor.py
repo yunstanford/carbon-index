@@ -16,7 +16,7 @@ from lru import LRU
 __all__ = ["filter", "fnmatch", "fnmatchcase", "translate"]
 
 
-_MAXCACHE = 10000
+_MAXCACHE = 100000
 _cache = LRU(_MAXCACHE)
 
 
