@@ -11,7 +11,7 @@ install_requires = ["lru-dict"]
 tests_require = []
 
 setup(name='carbon-index',
-      version='0.1.4',
+      version='0.1.5',
       description='',
       long_description=open(README_PATH).read(),
       author='Yun Xu',
