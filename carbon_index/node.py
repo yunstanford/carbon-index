@@ -1,4 +1,4 @@
-from .fnmatch_vendor import fnmatch
+from fnmatch_vendor import fnmatch
 from .utils import expand_braces
 
 

@@ -7,6 +7,8 @@ The function translate(PATTERN) returns a regular expression
 corresponding to PATTERN.  (It does not compile it.)
 """
 
+from libcpp.string cimport string
+
 import re
 import os
 import posixpath
@@ -20,7 +22,7 @@ _MAXCACHE = 100000
 _cache = LRU(_MAXCACHE)
 
 
-def fnmatch(name, pat):
+cpdef fnmatch(string name, string pat):
     """Test whether FILENAME matches PATTERN.
     Patterns are Unix shell style:
     *       matches everything
@@ -37,9 +39,9 @@ def fnmatch(name, pat):
     return fnmatchcase(name, pat)
 
 
-def filter(names, pat):
+cpdef filter(names, string pat):
     """Return the subset of the list NAMES that match PAT"""
-    result=[]
+    result = []
     pat=os.path.normcase(pat)
     try:
         re_pat = _cache[pat]
@@ -59,7 +61,7 @@ def filter(names, pat):
     return result
 
 
-def fnmatchcase(name, pat):
+cdef fnmatchcase(string name, string pat):
     """Test whether FILENAME matches PATTERN, including case.
     This is a version of fnmatch() which doesn't case-normalize
     its arguments.
@@ -73,16 +75,19 @@ def fnmatchcase(name, pat):
     return re_pat.match(name) is not None
 
 
-def translate(pat):
+cdef translate(string pat):
     """Translate a shell PATTERN to a regular expression.
     There is no way to quote meta-characters.
     """
+    cdef int i = 0
+    cdef int n = pat.size()
+    cdef string res = ''
+    cdef char c
+    # cdef string stuff
 
-    i, n = 0, len(pat)
-    res = ''
     while i < n:
         c = pat[i]
-        i = i+1
+        i = i + 1
         if c == '*':
             res = res + '.*'
         elif c == '?':
@@ -90,21 +95,22 @@ def translate(pat):
         elif c == '[':
             j = i
             if j < n and pat[j] == '!':
-                j = j+1
+                j = j + 1
             if j < n and pat[j] == ']':
-                j = j+1
+                j = j + 1
             while j < n and pat[j] != ']':
-                j = j+1
+                j = j + 1
             if j >= n:
                 res = res + '\\['
             else:
-                stuff = pat[i:j].replace('\\','\\\\')
-                i = j+1
+                stuff = pat[i:j].decode()
+                stuff = stuff.replace('\\','\\\\')
+                i = j + 1
                 if stuff[0] == '!':
-                    stuff = '^' + stuff[1:]
+                    stuff[0] = '^'
                 elif stuff[0] == '^':
                     stuff = '\\' + stuff
-                res = '%s[%s]' % (res, stuff)
+                res = res + '[' + stuff + ']'
         else:
-            res = res + re.escape(c)
+            res = res + re.escape((<bytes> c))
     return res + '\Z(?ms)'
