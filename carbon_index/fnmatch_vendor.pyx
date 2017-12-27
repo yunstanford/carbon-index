@@ -8,6 +8,8 @@ corresponding to PATTERN.  (It does not compile it.)
 """
 
 from libcpp.string cimport string
+from libcpp.vector cimport vector
+
 
 import re
 import os
@@ -39,25 +41,25 @@ cpdef fnmatch(string name, string pat):
     return fnmatchcase(name, pat)
 
 
-cpdef filter(names, string pat):
-    """Return the subset of the list NAMES that match PAT"""
-    result = []
-    pat=os.path.normcase(pat)
+cpdef filter(vector[string] names, string pat):
+    """Return the subset of the list NAMES that match PAT
+
+    *** Fast Version without normcase *** But only works in unix and macos ***
+    """
+    cdef vector[string] result
+
     try:
         re_pat = _cache[pat]
     except KeyError:
         res = translate(pat)
         _cache[pat] = re_pat = re.compile(res)
     match = re_pat.match
-    if os.path is posixpath:
-        # normcase on posix is NOP. Optimize it away from the loop.
-        for name in names:
-            if match(name):
-                result.append(name)
-    else:
-        for name in names:
-            if match(os.path.normcase(name)):
-                result.append(name)
+
+    # normcase on posix is NOP. Optimize it away from the loop.
+    for name in names:
+        if match(name):
+            result.push_back(name)
+
     return result
 
 
