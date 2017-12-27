@@ -1,35 +1,44 @@
+from libcpp.map cimport map
+from libcpp.string cimport string
+from libcpp.vector cimport vector
+from libcpp cimport bool
+
+
 import fnmatch
 from .utils import expand_braces
 
 
-class TrieNode:
+cdef class TrieNode:
     """
     an standard unit in carbon index.
     """
+    cdef public string name
+    cdef public bool is_leaf
+    cdef public string sep
+    cdef public map[string, vector[TrieNode]] children
 
     def __init__(self, name, is_leaf=True, sep="."):
         self.is_leaf = is_leaf
         self.name = name
         self.sep = "."
-        self.children = dict()
 
-    def get(self, child_name):
+    cdef get(self, child_name):
         """
         get child node.
 
         args: name of child node.
         """
-        return self.children.get(child_name, None)
+        return self.children[child_name]
 
-    def has_child(self, child_name):
+    cdef has_child(self, child_name):
         """
         check if child_name exists.
 
         args: name of a child node.
         """
-        return child_name in self.children
+        return self.children.find(child_name) != self.children.end()
 
-    def get_all(self, pattern):
+    cdef get_all(self, pattern):
         """
         get all children nodes based on wild card query.
 
@@ -43,7 +52,7 @@ class TrieNode:
                     matches.append(self.children[child])
         return matches
 
-    def delete(self, child_name):
+    cdef delete(self, child_name):
         """
         provide to pop a child node.
 
@@ -54,7 +63,7 @@ class TrieNode:
             return True
         return False
 
-    def add(self, child_node):
+    cdef add(self, child_node):
         """
         append a child node.
 
@@ -69,7 +78,7 @@ class TrieNode:
         else:
             self.children[child_node.name] = child_node
 
-    def expand_query(self, query):
+    cdef expand_query(self, query):
         """
         expand a wildcard query.
 
@@ -93,7 +102,7 @@ class TrieNode:
                     queries.append(".".join([match.name, sq]))
             return queries
 
-    def expand_pattern(self, query):
+    cdef expand_pattern(self, query):
         """
         expand a wildcard query pattern.
 
@@ -122,19 +131,19 @@ class TrieNode:
                     queries.append((".".join([match.name, sq]), is_leaf))
             return queries
 
-    def is_leaf(self):
+    cdef is_leaf(self):
         """
         return true if the node is leaf.
         """
         return self.is_leaf
 
-    def count(self):
+    cdef count(self):
         """
         children count.
         """
         return len(self.children)
 
-    def is_exist(self, query):
+    cdef is_exist(self, query):
         """
         return true if query exist. query match starts from child level/next level.
 
