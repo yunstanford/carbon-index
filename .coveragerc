@@ -1,0 +1,2 @@
+[run]
+omit = carbon_index/fnmatch_vendor.py

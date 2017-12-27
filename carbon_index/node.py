@@ -1,4 +1,4 @@
-import fnmatch
+from .fnmatch_vendor import fnmatch
 from .utils import expand_braces
 
 
@@ -39,7 +39,7 @@ class TrieNode:
         patterns = expand_braces(pattern)
         for child in self.children:
             for p in patterns:
-                if fnmatch.fnmatch(child, p):
+                if fnmatch(child, p):
                     matches.append(self.children[child])
         return matches
 

@@ -1,5 +1,3 @@
-import fnmatch
-import os.path
 import re
 
 
