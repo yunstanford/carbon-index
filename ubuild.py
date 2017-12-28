@@ -4,6 +4,7 @@ from uranium import task_requires
 
 
 def main(build):
+    build.packages.install("cython")
     build.packages.install(".", develop=True)
 
 

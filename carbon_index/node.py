@@ -1,5 +1,5 @@
-from .fnmatch_vendor import fnmatch
-from .utils import expand_braces
+from fnmatch_vendor import fnmatch
+from expand_utils import expand_braces
 
 
 class TrieNode:
