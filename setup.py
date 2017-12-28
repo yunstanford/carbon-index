@@ -31,7 +31,7 @@ ext_modules = [
 ]
 
 setup(name='carbon-index',
-      version='0.1.6',
+      version='0.1.7',
       description='',
       long_description=open(README_PATH).read(),
       author='Yun Xu',
