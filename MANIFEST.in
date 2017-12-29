@@ -1,0 +1,2 @@
+include carbon_index/*.*
+include README.rst
