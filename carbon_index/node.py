@@ -35,6 +35,9 @@ class TrieNode:
 
         args: query_pattern.
         """
+        if pattern == "*":
+            return [self.children[child] for child in self.children]
+
         matches = []
         patterns = expand_braces(pattern)
         for child in self.children:

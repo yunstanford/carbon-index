@@ -15,3 +15,4 @@ pip-selfcheck.json
 build/
 *.cpp
 *.so
+.pytest_cache

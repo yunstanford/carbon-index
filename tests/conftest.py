@@ -41,3 +41,17 @@ def carbon_index():
     index.insert('ZG.trulia.product')
     index.insert('ZG.trulia.product.rental')
     return index
+
+
+@pytest.fixture
+def carbon_index_benchmark():
+    index = CarbonIndex()
+    index.insert('ZG.zillow.velocity')
+    index.insert('ZG.zillow.velocity.mondev')
+    index.insert('ZG.zillow.product.rental')
+    index.insert('ZG.zillow.product.listing')
+    index.insert('ZG.trulia.product')
+    index.insert('ZG.trulia.product.rental')
+    for i in range(200):
+        index.insert('ZG.zil{}low.product.rental'.format(i))
+    return index
